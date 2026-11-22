@@ -55,11 +55,18 @@ def _api_text():
     return "\n".join(out)
 
 def build_docs(examples=True):
-    """The full prompt prefix for an LLM: contract + API reference + working example programs."""
+    """The full prompt prefix for an LLM: contract + API reference + working example programs.
+    examples: True = all of them, False/[] = none, or a list of example names to keep the prompt short
+    (small models do better with 2-3 relevant examples than with all 8). Names: see Sufvid.agent.examples."""
     parts = [CONVENTIONS, "\nAPI (all of it comes from `from Sufvid import *`):", _api_text()]
     if examples:
         from .examples import EXAMPLES
+        names = list(EXAMPLES) if examples is True else list(examples)
+        unknown = [n for n in names if n not in EXAMPLES]
+        if unknown:
+            raise KeyError(f"unknown example(s) {unknown}; available: {sorted(EXAMPLES)}")
         parts.append("\nWORKING EXAMPLE PROGRAMS (each one passes check_scene and renders):")
-        for name, code in EXAMPLES.items():
+        for name in names:
+            code = EXAMPLES[name]
             parts.append(f"\n### example: {name}\n```python\n{code.strip()}\n```")
     return "\n".join(parts)
