@@ -7,7 +7,7 @@ No Manim, no AI video generators, no classes: just Pillow, NumPy, SciPy and ffmp
 ![Dependencies](https://img.shields.io/badge/deps-numpy%20%7C%20scipy%20%7C%20pillow%20%7C%20matplotlib-lightgrey)
 ![Public API](https://img.shields.io/badge/public%20API-39%20functions-green)
 
-![Gallery of scenes rendered by Sufvid](docs/gallery.png)
+![Gallery of scenes rendered by Sufvid](gallery.png)
 
 Every frame above was drawn by Sufvid, and every number on screen was **computed** (SciPy ODE solvers, a
 neural net trained in NumPy), never faked.
