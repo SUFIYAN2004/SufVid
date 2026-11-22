@@ -109,8 +109,8 @@ def _preview(scene, timeline, duration, fractions=(0.0, 0.5, 1.0)):
         raise _Fail("preview", f"the last frame (t={duration:.2f}s) is empty: everything has disappeared "
                                "(a fade_out at the end?). Keep something visible at the end")
 
-def _prompt(task, history):
-    p = build_docs() + f"\n\nTASK:\n{task}\n"
+def _prompt(task, history, docs=None):
+    p = (build_docs() if docs is None else docs) + f"\n\nTASK:\n{task}\n"
     if history:
         h = history[-1]
         p += (f"\nYOUR PREVIOUS PROGRAM:\n```python\n{h['code'].strip()}\n```\n"
@@ -118,19 +118,21 @@ def _prompt(task, history):
               "Fix exactly this problem and return the complete corrected program in one ```python block.\n")
     return p
 
-def agent_loop(task, generate, max_tries=4, path="agent_out.mp4", size=None, fps=30, verbose=True):
+def agent_loop(task, generate, max_tries=4, path="agent_out.mp4", size=None, fps=30, verbose=True, docs=None):
     """Ask an LLM for a Sufvid program, check it, render it, and feed every failure back until it works.
     task: plain-English description of the video.
     generate: ANY function prompt:str -> reply:str (wrap your LLM client; the reply may contain prose
       and a ```python block).
     Stages: exec -> contract -> check (check_scene) -> preview (3 real frames) -> render (mp4).
+    docs: prompt prefix shown to the model; default build_docs() (everything). For small models pass
+      build_docs(examples=["graph_and_ball", ...]) to keep the prompt short.
     size: optional (w, h) override for the final render only (the checks always run at the program's own size).
       Text and stroke sizes are fixed PIXELS, so a smaller size makes them look bigger relative to the layout:
       use it for quick smoke tests, not for judging the final look.
     Returns {'ok', 'video', 'code', 'attempts', 'history', 'render'}; history = failed attempts."""
     history = []
     for k in range(1, max_tries + 1):
-        reply = generate(_prompt(task, history))
+        reply = generate(_prompt(task, history, docs))
         if not isinstance(reply, str):
             raise TypeError("generate(prompt) must return a string")
         code = _extract_code(reply)
