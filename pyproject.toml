@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Sufvid"
+version = "0.1.0"
+description = "Narrated math and physics tutorial videos from plain functions: Pillow, NumPy, SciPy and ffmpeg only."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy", "scipy", "pillow", "matplotlib"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+llm = ["anthropic"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
