@@ -1,4 +1,4 @@
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 from .core.colors import with_alpha, mix_colors
 from .core.interpolate import lerp, remap, clamp
