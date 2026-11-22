@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "Sufvid"
-version = "0.1.0"
+version = "0.2.0"
 description = "Narrated math and physics tutorial videos from plain functions: Pillow, NumPy, SciPy and ffmpeg only."
 readme = "README.md"
 requires-python = ">=3.10"
